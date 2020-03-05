@@ -42,6 +42,8 @@ servicePort: 8081
 
 ## Provides schema registry service settings
 service:
+  ## Any annotations to add to the service
+  annotations: {}
   ## Any additional labels to add to the service
   labels: {}
 
@@ -57,10 +59,19 @@ kafkaStore:
   ## Additional Java arguments to pass to Kafka.
   # schemaRegistryOpts: -Dfoo=bar
 
-## Readiness probe config.
+## Liveness and readiness probe config.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
 ##
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8081
+  initialDelaySeconds: 10
+  timeoutSeconds: 5
 readinessProbe:
+  httpGet:
+    path: /
+    port: 8081
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
@@ -132,6 +143,7 @@ external:
   servicePort: 443
   loadBalancerIP: ""
   nodePort: ""
+  annotations: {}
 
 ## Provide JMX Port
 jmx:
