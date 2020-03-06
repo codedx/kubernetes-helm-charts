@@ -276,6 +276,7 @@ spec:
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
+      priorityClassName: {{ .Values.master.priorityClassName | quote }}
       volumes:
         {{- if .Values.master.config }}
         - name: config

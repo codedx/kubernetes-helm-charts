@@ -244,6 +244,8 @@ master:
     ##
     size: 8Gi
 
+  priorityClassName: ""
+
   extraInitContainers: |
   # - name: do-something
   #   image: busybox
@@ -375,6 +377,8 @@ slave:
     ## Persistent Volume size
     ##
     size: 8Gi
+
+  priorityClassName: ""
 
   extraInitContainers: |
   # - name: do-something
