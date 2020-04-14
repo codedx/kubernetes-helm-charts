@@ -287,3 +287,11 @@ Return the name of the Secret used to store the passwords
 {{ template "mariadb.fullname" . -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "mariadb.master.priorityClassName" -}}
+{{- printf "%s-%s" (include "mariadb.fullname" .) "db-master-pc" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "mariadb.slave.priorityClassName" -}}
+{{- printf "%s-%s" (include "mariadb.fullname" .) "db-slave-pc" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

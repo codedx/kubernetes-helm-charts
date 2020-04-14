@@ -244,7 +244,7 @@ master:
     ##
     size: 8Gi
 
-  priorityClassName: ""
+  priorityClassValue: 0
 
   extraInitContainers: |
   # - name: do-something
@@ -378,7 +378,7 @@ slave:
     ##
     size: 8Gi
 
-  priorityClassName: ""
+  priorityClassValue: 0
 
   extraInitContainers: |
   # - name: do-something
