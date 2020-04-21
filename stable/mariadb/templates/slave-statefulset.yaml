@@ -100,6 +100,22 @@ spec:
               mountPath: /bitnami/mariadb
         {{- end }}
       containers:
+        - name: dbbackup
+          image: codedx/codedx-dbbackup:v1.0.0
+          imagePullPolicy: Always
+          args:
+          - /usr/sbin/cron
+          - -f
+          - -L
+          - "15"
+          command:
+          - /usr/bin/sudo
+          volumeMounts:
+          - mountPath: /bitnami/mariadb
+            name: data
+          - mountPath: /home/sdb/cfg
+            name: rootpwd
+            readOnly: true
         - name: "mariadb"
           image: {{ template "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -266,6 +282,12 @@ spec:
         - name: config
           configMap:
             name: {{ template "slave.fullname" . }}
+        - name: rootpwd
+          secret:
+            secretName: {{ template "mariadb.secretName" . }}
+            items:
+            - key: mariadb-root-password
+              path: .passwd
         {{- end }}
         {{- if or .Values.rootUser.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
         - name: mariadb-credentials
