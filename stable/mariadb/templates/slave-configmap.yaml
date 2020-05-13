@@ -12,4 +12,6 @@ metadata:
 data:
   my.cnf: |-
 {{ .Values.slave.config | indent 4 }}
+  backup.sh: |-
+{{ .Files.Get "backup.sh" | indent 4 }}
 {{- end }}
