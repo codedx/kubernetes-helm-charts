@@ -30,7 +30,6 @@ spec:
         {{ $key }}: {{ $value }}
         {{- end }}
       {{- end }}
-        backup.velero.io/backup-volumes: backup
         pre.hook.backup.velero.io/container: 'mariadb'
         pre.hook.backup.velero.io/timeout: {{ .Values.slave.persistence.backup.timeout | quote }}
         pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "/bitnami/mariadb/scripts/backup.sh"]' 
