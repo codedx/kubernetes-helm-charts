@@ -24,15 +24,12 @@ spec:
     {{- end }}
   template:
     metadata:
-      annotations:
       {{- if .Values.slave.annotations }}
+      annotations:
         {{- range $key, $value := .Values.slave.annotations }}
         {{ $key }}: {{ $value }}
         {{- end }}
       {{- end }}
-        pre.hook.backup.velero.io/container: 'mariadb'
-        pre.hook.backup.velero.io/timeout: {{ .Values.slave.persistence.backup.timeout | quote }}
-        pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "/bitnami/mariadb/scripts/backup.sh"]' 
       labels:
         app: {{ template "mariadb.name" . }}
         chart: {{ template "mariadb.chart" . }}

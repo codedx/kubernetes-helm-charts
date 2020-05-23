@@ -380,8 +380,6 @@ slave:
     backup:
       ## Persistent Volume backup size
       size: 8Gi
-      ## Database back up timeout
-      timeout: 30m
 
   priorityClassValue: 0
 
