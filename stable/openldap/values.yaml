@@ -39,6 +39,9 @@ podAnnotations: {}
 service:
   annotations: {}
 
+  # set allowLdapPort to false to require LDAPS
+  # note that you can force LDAPS on the pod/server by adding LDAP_TLS_ENFORCE=true to env: (see below)
+  includeLdapPort: true
   ldapPort: 389
   sslLdapPort: 636  # Only used if tls.enabled is true
   ## List of IP addresses at which the service is available

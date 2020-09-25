@@ -30,10 +30,12 @@ spec:
 {{ toYaml .Values.service.loadBalancerSourceRanges | indent 4 }}
 {{- end }}
   ports:
+{{- if .Values.service.includeLdapPort }}
     - name: ldap-port
       protocol: TCP
       port: {{ .Values.service.ldapPort }}
       targetPort: ldap-port
+{{- end }}
     - name: ssl-ldap-port
       protocol: TCP
       port: {{ .Values.service.sslLdapPort }}
