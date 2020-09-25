@@ -42,6 +42,7 @@ $ helm install stable/chaoskube --set dryRun=false
 | `name`                                    | container name                                                                        | chaoskube                        |
 | `image`                                   | docker image                                                                          | quay.io/linki/chaoskube          |
 | `imageTag`                                | docker image tag                                                                      | v0.11.0                          |
+| `imagePullSecrets`                        | A list of secret names for accessing private image registries                         | `[]`                             |
 | `replicas`                                | number of replicas to run                                                             | 1                                |
 | `interval`                                | interval between pod terminations                                                     | 10m                              |
 | `labels`                                  | label selector to filter pods by                                                      | "" (matches everything)          |
@@ -63,6 +64,7 @@ $ helm install stable/chaoskube --set dryRun=false
 | `affinity`                                | Affinity settings for pod assignment                                                  | `{}`                             |
 | `minimumAge`                              | Set minimum pod age to filter pod by                                                  | `0s`                             |
 | `podAnnotations`                          | Annotations for the chaoskube pod                                                     | `{}`                             |
+| `podLabels`                               | Labels for the chaoskube pod                                                          | `{}`                             |
 | `gracePeriod`                             | grace period to give pods when terminating them                                       | `-1s` (pod decides)              |
 | `metrics.enabled`                         | Enable metrics handler                                                                | `false`                          |
 | `metrics.port`                            | Listening port for metrics handler                                                    | `8080`                           |

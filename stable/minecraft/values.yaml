@@ -27,9 +27,9 @@ securityContext:
 # https://hub.docker.com/r/itzg/minecraft-server/
 livenessProbe:
   command:
-    - mcstatus
-    - localhost:25565
+    - mc-monitor
     - status
+    - localhost:25565
   initialDelaySeconds: 30
   periodSeconds: 5
   failureThreshold: 10
@@ -37,9 +37,9 @@ livenessProbe:
   timeoutSeconds: 1
 readinessProbe:
   command:
-    - mcstatus
-    - localhost:25565
+    - mc-monitor
     - status
+    - localhost:25565
   initialDelaySeconds: 30
   periodSeconds: 5
   failureThreshold: 10
@@ -64,7 +64,7 @@ minecraftServer:
   spigotDownloadUrl:
   # If type is set to PAPER, this sets the URL to download the PaperSpigot package
   paperDownloadUrl:
-  # If type is set to FTB, this sets the server mod to run
+  # If type is set to FTB, this sets the server mod to run. You can also provide the URL to download the FTB package
   ftbServerMod:
   # Set to true if running Feed The Beast and get an error like "unable to launch forgemodloader"
   ftbLegacyJavaFixer: false
@@ -173,6 +173,9 @@ persistence:
   dataDir:
     # Set this to false if you don't care to persist state between restarts.
     enabled: true
+    # existingClaim: nil
     Size: 1Gi
 
 podAnnotations: {}
+
+deploymentAnnotations: {}

@@ -1,5 +1,49 @@
 # newrelic-infrastructure
 
+## This Helm chart is deprecated
+
+Given the [`stable` deprecation timeline](https://github.com/helm/charts#deprecation-timeline), the New Relic infrastructure integration chart is now located at [newrelic/helm-charts](https://github.com/newrelic/helm-charts/).
+
+New Relic will continue providing the same cadence of updates, support, etc that we've been keeping here these years. Installation instructions are very similar, just adding the _newrelic_ repo and using it during the installation (`newrelic/<chart>` instead of `stable/<chart>`).
+
+```bash
+$ helm repo add newrelic https://helm-charts.newrelic.com
+$ helm install my-release newrelic/<chart>           # Helm 3
+$ helm install --name my-release newrelic/<chart>    # Helm 2
+```
+
+To update an exisiting _stable_ deployment with a chart hosted in the New Relic repository you can execute:
+
+```bash
+$ helm repo add newrelic https://helm-charts.newrelic.com
+$ helm upgrade my-release newrelic/<chart>
+```
+
+Issues and PRs related to the chart itself will be redirected to `newrelic/charts` GitHub repository.
+
+## Past contributors
+
+New Relic is very thankful for all the 15+ community members that contributed and helped maintain this chart throughout the years:
+
+* coreypobrien
+* sstarcher
+* jmccarty3
+* slayerjain
+* ryanhope2
+* rk295
+* michaelajr
+* isindir
+* idirouhab
+* ismferd
+* enver
+* diclophis
+* jeffdesc
+* costimuraru
+* verwilst
+* ezelenka
+
+**Everyone is welcome to contribute at the new repository.**
+
 ## Chart Details
 
 This chart will deploy the New Relic Infrastructure agent as a Daemonset.
@@ -14,6 +58,7 @@ This chart will deploy the New Relic Infrastructure agent as a Daemonset.
 | `customSecretLicenseKey`       | Key in the Secret object where the license key is stored.                                                                                                                                                                                         |                           |
 | `config`                       | A `newrelic.yml` file if you wish to provide.                                                                                                                                                                                                     |                           |
 | `integrations_config`          | List of Integrations configuration to monitor services running on Kubernetes. More information on can be found [here](https://docs.newrelic.com/docs/integrations/kubernetes-integration/link-apps-services/monitor-services-running-kubernetes). |                           |
+| `disableKubeStateMetrics`          | Disables kube-state-metrics data parsing if the value is ` true`.                                                                                                                              |   `false`                        |
 | `kubeStateMetricsUrl`          | If provided, the discovery process for kube-state-metrics endpoint won't be triggered. Example: http://172.17.0.3:8080                                                                                                                            |                           |
 | `kubeStateMetricsPodLabel`     | If provided, the kube-state-metrics pod will be discovered using this label. (should be `true` on target pod)                                                                                                                                     |                           |
 | `kubeStateMetricsTimeout`      | Timeout for accessing kube-state-metrics in milliseconds. If not set the newrelic default is 5000                                                                                                                                                 |                           |
@@ -24,7 +69,7 @@ This chart will deploy the New Relic Infrastructure agent as a Daemonset.
 | `privileged`                   | Enable privileged mode.                                                                                                                                                                                                                           | `true`                    |
 | `image.repository`             | The container to pull.                                                                                                                                                                                                                            | `newrelic/infrastructure` |
 | `image.pullPolicy`             | The pull policy.                                                                                                                                                                                                                                  | `IfNotPresent`            |
-| `image.tag`                    | The version of the container to pull.                                                                                                                                                                                                             | `1.15.0`                  |
+| `image.tag`                    | The version of the container to pull.                                                                                                                                                                                                             | `1.21.0`                  |
 | `resources`                    | Any resources you wish to assign to the pod.                                                                                                                                                                                                      | See Resources below       |
 | `verboseLog`                   | Should the agent log verbosely. (Boolean)                                                                                                                                                                                                         | `false`                   |
 | `priorityClassName`            | Scheduling priority of the pod                                                                                                                                                                                                                    | `nil`                     |
@@ -40,6 +85,7 @@ This chart will deploy the New Relic Infrastructure agent as a Daemonset.
 | `apiServerEndpointUrl`         | Explicitly sets the api server componenturl.                                                                                                                                                                                                      |                           |
 | `schedulerEndpointUrl`         | Explicitly sets the scheduler component url.                                                                                                                                                                                                      |                           |
 | `controllerManagerEndpointUrl` | Explicitly sets the controller manager component url.                                                                                                                                                                                             |                           |
+| `eventQueueDepth`              | Iincreases the in-memory cache of the agent to accommodate for more samples at a time.
 
 ## Example
 
