@@ -207,6 +207,10 @@ spec:
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mariadb/secrets/
             {{- end }}
+            {{- if .Values.master.masterCaConfigMap }}
+            - mountPath: /bitnami/mariadb/tls/ca 
+              name: cert-cm 
+            {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ template "mariadb.metrics.image" . }}
@@ -298,6 +302,11 @@ spec:
               - key: mariadb-replication-password
                 path: mariadb-replication-password
               {{- end }}
+        {{- end }}
+        {{- if .Values.master.masterCaConfigMap }}
+        - configMap: 
+            name: {{ .Values.master.masterCaConfigMap | quote }}
+          name: cert-cm 
         {{- end }}
 {{- if not .Values.slave.persistence.enabled }}
         - name: "data"

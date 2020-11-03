@@ -18,8 +18,8 @@
 ##
 image:
   registry: docker.io
-  repository: bitnami/mariadb
-  tag: 10.3.22-debian-10-r27
+  repository: codedx/mariadb
+  tag: 10.3.22-debian-10-r114
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -207,6 +207,14 @@ master:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+
+  ## The name of a k8s tls secret containg the master key pair.
+  ##
+  masterTlsSecret:
+
+  ## The name of a k8s generic secret containing the CA cert in PEM format that issued the masterTlsSecret.
+  ##
+  masterCaConfigMap:
 
   ## updateStrategy for MariaDB Master StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
