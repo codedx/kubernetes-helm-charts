@@ -289,7 +289,6 @@ master:
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    default-character-set=UTF8
     plugin_dir=/opt/bitnami/mariadb/plugin
 
     [manager]
@@ -425,7 +424,6 @@ slave:
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    default-character-set=UTF8
 
     [manager]
     port=3306
