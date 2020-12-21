@@ -3,7 +3,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "mariadb.fullname" . }}
+  name: {{ printf "%s-subordinate" (include "mariadb.fullname" .) }}
   labels:
     app: "{{ template "mariadb.name" . }}"
     component: "slave"
