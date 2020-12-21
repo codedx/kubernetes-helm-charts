@@ -10,11 +10,13 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
-{{- if .Values.master.podDisruptionBudget.minAvailable }}
-  minAvailable: {{ .Values.master.podDisruptionBudget.minAvailable }}
+{{- $minAvailable := .Values.master.podDisruptionBudget.minAvailable -}}
+{{- $maxUnavailable := .Values.master.podDisruptionBudget.maxUnavailable -}}
+{{- if kindIs "int64" $minAvailable }}   {{/* use kindIs to distinguish between an empty value and 0 */}}
+  minAvailable: {{ $minAvailable }}
 {{- end }}
-{{- if .Values.master.podDisruptionBudget.maxUnavailable }}
-  maxUnavailable: {{ .Values.master.podDisruptionBudget.maxUnavailable }}
+{{- if kindIs "int64" $maxUnavailable }} {{/* use kindIs to distinguish between an empty value and 0 */}}
+  maxUnavailable: {{ $maxUnavailable }}
 {{- end }}
   selector:
     matchLabels:
