@@ -12,11 +12,17 @@ metadata:
 spec:
 {{- $minAvailable := .Values.master.podDisruptionBudget.minAvailable -}}
 {{- $maxUnavailable := .Values.master.podDisruptionBudget.maxUnavailable -}}
-{{- if kindIs "int64" $minAvailable }}   {{/* use kindIs to distinguish between an empty value and 0 */}}
+
+{{- if or (kindIs "int64" $minAvailable) (kindIs "float64" $minAvailable) }}     {{/* use kindIs to distinguish between an empty value and 0 */}}
   minAvailable: {{ $minAvailable }}
+{{- else if $minAvailable }}  
+  minAvailable: {{ $minAvailable | quote }}
 {{- end }}
-{{- if kindIs "int64" $maxUnavailable }} {{/* use kindIs to distinguish between an empty value and 0 */}}
+
+{{- if or (kindIs "int64" $maxUnavailable) (kindIs "float64" $maxUnavailable) }} {{/* use kindIs to distinguish between an empty value and 0 */}}
   maxUnavailable: {{ $maxUnavailable }}
+{{- else if $maxUnavailable }}  
+  maxUnavailable: {{ $maxUnavailable | quote }}
 {{- end }}
   selector:
     matchLabels:
