@@ -252,7 +252,9 @@ master:
     ##
     size: 8Gi
 
-  priorityClassValue: 0
+  priorityClass:
+    create: true
+    value: 0
 
   extraInitContainers: |
   # - name: do-something
@@ -388,7 +390,9 @@ slave:
       ## Persistent Volume backup size
       size: 8Gi
 
-  priorityClassValue: 0
+  priorityClass:
+    create: true
+    value: 0
 
   extraInitContainers: |
   # - name: do-something

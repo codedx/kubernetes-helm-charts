@@ -1,7 +1,9 @@
+{{- if .Values.slave.priorityClass.create -}}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
   name: {{ include "mariadb.slave.priorityClassName" . | quote }}
-value: {{ .Values.slave.priorityClassValue }}
+value: {{ .Values.slave.priorityClass.value }}
 globalDefault: false
 description: "The priority class for the MariaDB slave database(s)."
+{{- end -}}
