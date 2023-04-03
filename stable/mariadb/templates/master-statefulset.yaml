@@ -285,7 +285,9 @@ spec:
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
         {{- end }}
+      {{- if .Values.master.priorityClass.create }}
       priorityClassName: {{ include "mariadb.master.priorityClassName" . | quote }}
+      {{- end }}
       volumes:
         {{- if .Values.master.config }}
         - name: config
