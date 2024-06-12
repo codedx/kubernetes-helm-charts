@@ -29,6 +29,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         app: {{ template "mariadb.name" . }}
         chart: {{ template "mariadb.chart" . }}
         release: {{ .Release.Name }}
