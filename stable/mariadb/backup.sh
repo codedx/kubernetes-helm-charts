@@ -28,6 +28,10 @@ DB_HOST=$(hostname)
 DB_UPWD=$(cat /opt/codedx/cfg/.passwd)
 check_exit $? 'read-password' $BACKUP_LOG_FILE 1
 
+replication_status=$(echo "show replica status" | mysql -EB --user=$DB_USER --password=$DB_UPWD)
+echo $replication_status | grep 'Slave_IO_Running:\sYes' | grep 'Slave_SQL_Running:\sYes' | grep 'Last_Errno:\s0' | grep 'Last_IO_Errno:\s0' | grep 'Last_SQL_Errno:\s0'
+check_exit $? 'test-replication' $BACKUP_LOG_FILE $?
+
 mariabackup --backup \
 	--datadir=$BACKUP_DATA_DIR \
 	--target-dir=$BACKUP_TARGET_DIR \
