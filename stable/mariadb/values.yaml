@@ -101,8 +101,13 @@ rbac:
 ##
 securityContext:
   enabled: true
-  fsGroup: 1001
-  runAsUser: 1001
+  pod:
+    fsGroup: 1001
+    runAsUser: 1001
+  initContainer:
+    runAsUser: 0
+  mariadbContainer:
+    runAsUser: 1001
 
 ## Use existing secret (ignores root, db and replication passwords)
 ##
@@ -121,7 +126,7 @@ rootUser:
   forcePassword: false
   ## Mount admin password as a file instead of using an environment variable
   ##
-  injectSecretsAsVolume: false
+  injectSecretsAsVolume: true
 
 ## Custom user/db credentials
 ##
@@ -141,7 +146,7 @@ db:
   forcePassword: false
   ## Mount user password as a file instead of using an environment variable
   ##
-  injectSecretsAsVolume: false
+  injectSecretsAsVolume: true
 
 ## Replication configuration
 ##
@@ -164,7 +169,7 @@ replication:
   forcePassword: false
   ## Mount replication user password as a file instead of using an environment variable
   ##
-  injectSecretsAsVolume: false
+  injectSecretsAsVolume: true
 
 ## initdb scripts
 ## Specify dictionary of scripts to be run at first boot

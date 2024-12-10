@@ -46,8 +46,7 @@ spec:
       serviceAccountName: {{ template "mariadb.serviceAccountName" . }}
       {{- if .Values.securityContext.enabled }}
       securityContext:
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- toYaml .Values.securityContext.pod | nindent 8 }}
       {{- end }}
       {{- if eq .Values.slave.antiAffinity "hard" }}
       affinity:
@@ -97,7 +96,7 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/mariadb"]
           securityContext:
-            runAsUser: 0
+            {{- toYaml .Values.securityContext.initContainer | nindent 12 }}
           resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: data
@@ -107,6 +106,10 @@ spec:
         - name: "mariadb"
           image: {{ template "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext:
+            {{- toYaml .Values.securityContext.mariadbContainer | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.image.debug}}
             - name: BITNAMI_DEBUG
