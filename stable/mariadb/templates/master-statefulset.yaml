@@ -204,6 +204,8 @@ spec:
           resources: {{ toYaml .Values.master.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: mariadb-tmp
+              mountPath: /opt/bitnami/mariadb/tmp
             - name: data
               mountPath: {{ .Values.master.persistence.mountPath }}
               {{- if .Values.master.persistence.subPath }}
@@ -295,6 +297,8 @@ spec:
       priorityClassName: {{ include "mariadb.master.priorityClassName" . | quote }}
       {{- end }}
       volumes:
+        - name: mariadb-tmp
+          emptyDir: {}    
         {{- if .Values.master.config }}
         - name: config
           configMap:
