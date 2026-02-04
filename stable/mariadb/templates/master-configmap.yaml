@@ -15,11 +15,11 @@ data:
 {{ .Values.master.config | indent 4 }}
 {{- if .Values.master.masterTlsSecret }}
     [mysqld]
-    ssl_cert=/bitnami/mariadb/tls/cert/tls.crt
-    ssl_key=/bitnami/mariadb/tls/cert/tls.key
+    ssl_cert=/mariadb/tls/cert/tls.crt
+    ssl_key=/mariadb/tls/cert/tls.key
 {{- end }}
 {{- if .Values.master.masterCaConfigMap }}
     [mysqld]
-    ssl_ca=/bitnami/mariadb/tls/ca/ca.crt
+    ssl_ca=/mariadb/tls/ca/ca.crt
 {{- end }}
 {{- end -}}

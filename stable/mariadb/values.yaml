@@ -13,13 +13,10 @@
 ##
 # schedulerName:
 
-## Bitnami MariaDB image
-## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
-##
 image:
   registry: docker.io
   repository: codedx/codedx-mariadb
-  tag: v1.0.0
+  tag: 10.6.24-jammy
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -34,7 +31,6 @@ image:
 
   ## Set to true if you would like to see extra information on logs
   ## It turns BASH and NAMI debugging in minideb
-  ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   debug: false
 
 # -- labels added to the database pods
@@ -117,7 +113,6 @@ securityContext:
 ##
 rootUser:
   ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
   ##
   password: ""
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -132,12 +127,10 @@ rootUser:
 ##
 db:
   ## MariaDB username and password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-user-on-first-run
   ##
   user: ""
   password: ""
   ## Database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#creating-a-database-on-first-run
   ##
   name: my_database
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -156,11 +149,9 @@ replication:
   ##
   enabled: true
   ## MariaDB replication user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
   user: replicator
   ## MariaDB replication user password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-up-a-replication-cluster
   ##
   password: ""
   ## Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
@@ -240,7 +231,7 @@ master:
     # existingClaim:
     # Subdirectory of the volume to mount
     # subPath:
-    mountPath: /bitnami/mariadb
+    mountPath: /mariadb
     ## Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -282,29 +273,30 @@ master:
   ##
   config: |-
     [mysqld]
+    init_file=/docker-entrypoint-initdb.d/runalways-setup.sql
     skip-name-resolve
     explicit_defaults_for_timestamp
-    basedir=/opt/bitnami/mariadb
-    plugin_dir=/opt/bitnami/mariadb/plugin
+    basedir=/usr
+    datadir=/mariadb/data/
+    plugin_dir=/usr/lib/mysql/plugin/
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    tmpdir=/opt/bitnami/mariadb/tmp
+    socket=/usr/tmp/mysqld.sock
+    tmpdir=/usr/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    pid-file=/usr/tmp/mysqld.pid
     character-set-server=UTF8
     collation-server=utf8_general_ci
 
     [client]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    plugin_dir=/opt/bitnami/mariadb/plugin
+    socket=/usr/tmp/mysqld.sock
+    plugin_dir=/usr/lib/mysql/plugin/
 
     [manager]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    socket=/usr/tmp/mysqld.sock
+    pid-file=/usr/tmp/mysqld.pid
 
   ## Configure master resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -422,25 +414,27 @@ slave:
     [mysqld]
     skip-name-resolve
     explicit_defaults_for_timestamp
-    basedir=/opt/bitnami/mariadb
+    basedir=/usr
+    datadir=/mariadb/data/
+    plugin_dir=/usr/lib/mysql/plugin/
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    tmpdir=/opt/bitnami/mariadb/tmp
+    socket=/usr/tmp/mysqld.sock
+    tmpdir=/usr/tmp
     max_allowed_packet=16M
     bind-address=0.0.0.0
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
-    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    pid-file=/usr/tmp/mysqld.pid
     character-set-server=UTF8
     collation-server=utf8_general_ci
 
     [client]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    socket=/usr/tmp/mysqld.sock
+    plugin_dir=/usr/lib/mysql/plugin/
 
     [manager]
     port=3306
-    socket=/opt/bitnami/mariadb/tmp/mysql.sock
-    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    socket=/usr/tmp/mysqld.sock
+    pid-file=/usr/tmp/mysqld.pid
 
   ##
   ## Configure slave resource requests and limits

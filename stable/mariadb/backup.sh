@@ -2,11 +2,11 @@
 
 echo "Creating backup directory..."
 
-BACKUP_DIR='/bitnami/mariadb/backup/data'
+BACKUP_DIR='/mariadb/backup/data'
 
 [ -d $BACKUP_DIR ] || (mkdir -p $BACKUP_DIR)
 
-BACKUP_DATA_DIR='/bitnami/mariadb/data'
+BACKUP_DATA_DIR='/mariadb/data'
 BACKUP_TARGET_DIR="$BACKUP_DIR/$(date +%Y%m%d-%H%M%S-Full)"
 BACKUP_LOG_FILE="$BACKUP_DIR/backup.log"
 BACKUP_DONE_FILE="$BACKUP_TARGET_DIR/done"

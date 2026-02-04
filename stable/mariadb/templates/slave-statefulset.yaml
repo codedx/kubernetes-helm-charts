@@ -94,13 +94,13 @@ spec:
         - name: volume-permissions
           image: {{ template "mariadb.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/bitnami/mariadb"]
+          command: ["chown", "-R", "{{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }}", "/mariadb"]
           securityContext:
             {{- toYaml .Values.securityContext.initContainer | nindent 12 }}
           resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: /bitnami/mariadb
+              mountPath: /mariadb
         {{- end }}
       containers:
         - name: "mariadb"
@@ -111,10 +111,6 @@ spec:
             {{- toYaml .Values.securityContext.mariadbContainer | nindent 12 }}
           {{- end }}
           env:
-            {{- if .Values.image.debug}}
-            - name: BITNAMI_DEBUG
-              value: "true"
-            {{- end }}
             {{- if .Values.slave.extraFlags }}
             - name: MARIADB_EXTRA_FLAGS
               value: "{{ .Values.slave.extraFlags }}"
@@ -129,7 +125,7 @@ spec:
               value: "root"
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_MASTER_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-root-password"
+              value: "/usr/secrets/mariadb-root-password"
             {{- else }}
             - name: MARIADB_MASTER_ROOT_PASSWORD
               valueFrom:
@@ -141,7 +137,7 @@ spec:
               value: "{{ .Values.replication.user }}"
             {{- if .Values.replication.injectSecretsAsVolume }}
             - name: MARIADB_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/mariadb/secrets/mariadb-replication-password"
+              value: "/usr/secrets/mariadb-replication-password"
             {{- else }}
             - name: MARIADB_REPLICATION_PASSWORD
               valueFrom:
@@ -202,28 +198,28 @@ spec:
           {{- end }}
           volumeMounts:
             - name: mariadb-tmp
-              mountPath: /opt/bitnami/mariadb/tmp
+              mountPath: /usr/tmp
             - name: data
-              mountPath: /bitnami/mariadb
+              mountPath: /mariadb
             {{- if .Values.slave.config }}
             - name: backup
-              mountPath: /bitnami/mariadb/backup
+              mountPath: /mariadb/backup
             - mountPath: /opt/codedx/cfg
               name: rootpwd
               readOnly: true
             - name: config
-              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              mountPath: /etc/mysql/my.cnf
               subPath: my.cnf
             - name: backupscript
-              mountPath: /bitnami/mariadb/scripts/backup.sh
+              mountPath: /mariadb/scripts/backup.sh
               subPath: backup.sh
             {{- end }}
             {{- if or .Values.rootUser.injectSecretsAsVolume .Values.replication.injectSecretsAsVolume }}
             - name: mariadb-credentials
-              mountPath: /opt/bitnami/mariadb/secrets/
+              mountPath: /usr/secrets/
             {{- end }}
             {{- if .Values.master.masterCaConfigMap }}
-            - mountPath: /bitnami/mariadb/tls/ca 
+            - mountPath: /mariadb/tls/ca 
               name: cert-cm 
             {{- end }}
         {{- if .Values.metrics.enabled }}
@@ -233,7 +229,7 @@ spec:
           env:
             {{- if .Values.rootUser.injectSecretsAsVolume }}
             - name: MARIADB_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/mysqld-exporter/secrets/mariadb-root-password"
+              value: "/usr/secrets/mariadb-root-password"
             {{- else }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -284,7 +280,7 @@ spec:
           {{- if .Values.rootUser.injectSecretsAsVolume }}
           volumeMounts:
             - name: mariadb-credentials
-              mountPath: /opt/bitnami/mysqld-exporter/secrets/
+              mountPath: /usr/secrets/
           {{- end }}
         {{- end }}
       {{- if .Values.slave.priorityClass.create }}

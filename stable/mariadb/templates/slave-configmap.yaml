@@ -15,7 +15,7 @@ data:
 {{ .Values.slave.config | indent 4 }}
 {{- if .Values.master.masterCaConfigMap }}
     [client]
-    ssl_ca=/bitnami/mariadb/tls/ca/ca.crt
+    ssl_ca=/mariadb/tls/ca/ca.crt
 {{- end }}
   backup.sh: |-
 {{ .Files.Get "backup.sh" | indent 4 }}
