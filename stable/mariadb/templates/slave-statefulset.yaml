@@ -145,11 +145,16 @@ spec:
                   name: {{ template "mariadb.secretName" . }}
                   key: mariadb-replication-password
             {{- end }}
+            {{- $masterSsl := and .Values.master.masterTlsSecret .Values.master.masterCaConfigMap }}
             - name: MARIADB_MASTER_SSL
-            {{- if and .Values.master.masterTlsSecret .Values.master.masterCaConfigMap }}            
+            {{- if $masterSsl }}
               value: 'on'
             {{- else }}
               value: 'off'
+            {{- end }}
+            {{- if $masterSsl }}
+            - name: MARIADB_MASTER_SSL_CA
+              value: '/mariadb/tls/ca/ca.crt'
             {{- end }}
             {{- if .Values.slave.extraEnvVars }}
             {{- tpl (toYaml .Values.slave.extraEnvVars) $ | nindent 12 }}
